@@ -15,28 +15,20 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="selman.cpp">
+    <ClCompile Include="001_C_CPP_FARKLAR\cpp_01.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp_01.cpp">
+    <ClCompile Include="001_C_CPP_FARKLAR\cpp_02.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp_02.cpp">
+    <ClCompile Include="001_C_CPP_FARKLAR\cpp_03.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp_03.cpp">
+    <ClCompile Include="001_C_CPP_FARKLAR\cpp_04.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp_04.cpp">
+    <ClCompile Include="001_C_CPP_FARKLAR\cpp_05.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp_05.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="selman.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
