@@ -27,7 +27,7 @@ int main()
 	*p2 = 40;
 	/*
 	// yukaridaki  hatanin sebebi pointer to const int olarak tanimlanmis olan
-	// (adresini gosterdigi degiskenin degerini degistirmemeyi taahut etmis) pointer'in
+	// (adresini gosterdigi degiskenin degerini degistirmemeyi taahhut etmis) pointer'in
 	// onun degerini degistirmeye calismasindan kaynaklanmaktadir. 
 	*/
 	p2 = &y;
