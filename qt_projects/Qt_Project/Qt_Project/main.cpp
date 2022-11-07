@@ -1,5 +1,6 @@
 #include "Qt_Project.h"
 #include <QtWidgets/QApplication>
+#include "Home_page.h"
 
 int main(int argc, char *argv[])
 {
