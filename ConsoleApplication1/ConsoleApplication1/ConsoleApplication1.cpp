@@ -8,7 +8,6 @@
 #define PRINT_MATCH false
 #define PRINT_SEARCH false
 
-
 using namespace std;
 
 class Efficiency {
@@ -19,28 +18,37 @@ public:
         if (!file.is_open())
             std::cout << "file is not open \n";
 
+        push_lib_from_file();
+
+        print_all_vector(lib_vector);
+
+        delete_lib();
+        
+        print_all_vector(lib_vector);
+
+        write_to_file("output.txt", lib_vector);
+        write_to_file("deleted_lib.txt", lib_deleted);
+    }
+
+    void push_lib_from_file()
+    {
         string line{};
         while (getline(file, line))
         {
-            lib_vector.push_back({get_libs(line)[0], get_libs(line)[1]});
+            lib_vector.push_back({ get_libs(line)[0], get_libs(line)[1] });
         }
-        print_all_vector(true, false, false);
-
-        cout << "vector_size= " << lib_vector.size() << "\n";
-
-
+    }
+    void delete_lib()
+    {
         for (int i = 0; i < lib_vector.size(); i++)
         {
-            bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i);
+            bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i, lib_parent, lib_child);
             if (is_delete)
-                lib_vector.erase(lib_vector.begin() + 3);
+            {
+                lib_deleted.push_back({ lib_vector[i][0], lib_vector[i][1] });
+                lib_vector.erase(lib_vector.begin() + i);
+            }
         }
-        print_all_vector(true, false, false);
-
-        cout << "vector_size= " << lib_vector.size() << "\n";
-
-        write_to_file("output.txt");
-
     }
 
     static std::string* get_libs(std::string line)
@@ -71,8 +79,8 @@ public:
         return libs;
     }
 
-
-    bool match_parent_child(string parent_lib_name, string child_lib_name)
+    bool match_parent_child(string parent_lib_name, string child_lib_name, 
+        vector<vector<string>>& lib_parent, vector<vector<string>>& lib_child)
     {
         for (int i = 0; i < lib_parent.size(); i++)
         {
@@ -91,7 +99,9 @@ public:
         }
         return false;
     }
-    bool search_parent_child(string parent_lib_name, string child_lib_name, int parent_id)
+    
+    bool search_parent_child(string parent_lib_name, string child_lib_name, int parent_id,
+        vector<vector<string>>& lib_parent, vector<vector<string>>& lib_child)
     {
         if (PRINT_SEARCH)
         {
@@ -113,72 +123,57 @@ public:
                 if (lib_vector[i][k] == child_lib_name)
                     lib_child.push_back(lib_vector[i]);
         }
-        return match_parent_child(parent_lib_name, child_lib_name);
+        return match_parent_child(parent_lib_name, child_lib_name, lib_parent, lib_child);
     }
 
-    void print_all_vector(bool all_list, bool parent_list, bool child_list)
+    void print_all_vector(vector<vector<string>>& vector)
     {
-        if (all_list)
-        {
-            cout << "*********************\n";
-            cout << "All List\n";
-            cout << "*********************\n";
-            for (int i = 0; i < lib_vector.size(); i++) {
-                for (int j = 0; j < lib_vector[i].size(); j++)
-                {
-                    int size = static_cast <int>(lib_vector[i][j].length());
-                    std::cout << "[" << i << "][" << j << "]" << lib_vector[i][j] << setw(50 - size) << " ";
-                }
-                cout << "\n";
+        for (int i = 0; i < vector.size(); i++) {
+            for (int j = 0; j < vector[i].size(); j++)
+            {
+                int size = static_cast <int>(vector[i][j].length());
+                std::cout << "[" << i << "][" << j << "]" << vector[i][j] << setw(50 - size) << " ";
             }
-        }
-        
-        if (parent_list)
-        {
-            cout << "*********************\n";
-            cout << "Parent List\n";
-            cout << "*********************\n";
-            for (int i = 0; i < lib_parent.size(); i++) {
-                for (int j = 0; j < lib_parent[i].size(); j++) {
-                    int size = static_cast <int>(lib_vector[i][j].length());
-                    std::cout << "[" << i << "][" << j << "]" << lib_parent[i][j] << setw(50 - size) << "\t";
-                }
-                cout << "\n";
-            }
-        }
-        if (child_list)
-        {
-            cout << "*********************\n";
-            cout << "Child List\n";
-            cout << "*********************\n";
-            for (int i = 0; i < lib_child.size(); i++) {
-                for (int j = 0; j < lib_child[i].size(); j++)
-                {
-                    int size = static_cast <int>(lib_vector[i][j].length());
-                    std::cout << "[" << i << "][" << j << "]" << lib_child[i][j] << setw(50 - size) << "\t";
-                }
-                cout << "\n";
-            }
+            cout << "\n";
         }
         cout << "\n\n";
-
-        /*for (int i = 0; i < lib_vector.size(); i++) {
-            for (int j = 0; j < lib_vector[i].size(); j++)
-                std::cout << lib_vector[i][j] << "\t[" << i << "][" << j << "]\n";
-        }*/
+        cout << "[INFO]: Vector Size= " << lib_vector.size() << "\n";
     }
 
 private:
+    void delete_line()
+    {
+        string test = "selman tercioglu\nahmet deneme\ntest\n";
+        cout << "*******************************\n";
+        cout << test << "";
+        cout << "*******************************\n";
+
+        size_t nFPos = test.find("selman tercioglu");
+        //size_t nFPos = test.find("selman tercioglu");
+        size_t secondNL = test.find('\n', nFPos);
+        size_t firstNL = test.rfind('\n', nFPos);
+
+        if (firstNL == string::npos)
+        {
+            firstNL = 0;
+            test.erase(firstNL, secondNL + 1 - firstNL);
+        }
+        else {
+            test.erase(firstNL, secondNL - firstNL);
+        }
+        cout << test << "";
+        cout << "*******************************\n";
+    }
     
     vector<vector<string>> lib_vector;// efficient library list
     vector<vector<string>> lib_parent;
     vector<vector<string>> lib_child;
+    vector<vector<string>> lib_deleted;
 
     std::ifstream file;
     std::string file_name{};
 
-
-    void write_to_file(string output_file_name)
+    void write_to_file(string output_file_name, vector<vector<string>>& vector)
     {
         ofstream output_file(output_file_name);
         if (output_file.is_open())
@@ -186,17 +181,18 @@ private:
             for (int i = 0; i < lib_vector.size(); i++) {
                 for (int j = 0; j < lib_vector[i].size(); j++)
                 {
-                    int size = static_cast <int>(lib_vector[i][j].length());
+                    int size = static_cast <int>(vector[i][j].length());
                     if(j== 0)
-                        output_file << "\"" << lib_vector[i][j] << "\" -> " << setw(50 - size) << " ";
+                        output_file << "\"" << vector[i][j] << "\" -> " << setw(50 - size) << " ";
+                    
                     else
-                        output_file << "\"" << lib_vector[i][j] << "\"" << setw(50 - size) << " ";
-
+                        output_file << "\"" << vector[i][j] << "\"" << setw(50 - size) << " ";
                 }
                 output_file << "\n";
             }
         }
     }
+    
     std::string get_line_by_line()
     {
         std::string line;
@@ -348,6 +344,6 @@ int main()
 
 int main()
 {
-    //Efficiency x("dependency.txt");
+    Efficiency x("dependency.txt");
 
 }
