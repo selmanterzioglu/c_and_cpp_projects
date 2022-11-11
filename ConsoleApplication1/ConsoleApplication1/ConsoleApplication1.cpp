@@ -19,26 +19,58 @@ public:
 		if (!file.is_open())
 			std::cout << "file is not open \n";
 
-		//push_lib_from_file();
-		push_test_lib();
+
+
+		push_lib_from_file();
+		
+		//push_test_lib();
 
 		//delete_lib();
+		lib_vector = lib_file;
+		fill_temp();
+		run_algorithm();
 
-		/*write_to_file("output.txt", lib_vector);
+		write_to_file("output.txt", lib_update);
 		write_to_file("deleted_lib.txt", lib_deleted);
 
-		print_all_vector(lib_deleted);*/
+		//print_all_vector(lib_deleted);
+		cout << "Before   size= " << lib_file.size() << "\n";
+		cout << "Deleted  size= " << lib_deleted.size() << "\n";
+		cout << "After    size= " << lib_update.size() << "\n";
+
 	}
-	
+	void run_algorithm()
+	{
+		for (int i = 0; i < lib_file.size(); i++)
+		{
+			bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i, lib_parent, lib_child);
+			bool is_cricular = circular_dependency_control(i);
+
+			if (is_cricular == false && is_delete == true)
+				lib_deleted.push_back(lib_file[i]);
+			else
+				lib_update.push_back(lib_file[i]);
+		}
+	}
 	void fill_temp()
 	{
-		for (int i = 0; i < lib_vector.size(); i++)
+		bool add_node = false;
+
+		const int size = lib_vector.size();
+		for (int i = 0; i < size; i++)
 		{
+
 			if (line_circular_control(i, 0))
 				continue;
 
-			add_node_to_node(i);
+			if (control_same_line(i, lib_vector))
+				continue;
+
+			add_node = add_node_to_node(i);
 		}
+
+		if (add_node)
+			fill_temp();
 	}
 
 	void push_lib_from_file()
@@ -46,7 +78,7 @@ public:
 		string line{};
 		while (getline(file, line))
 		{
-			lib_vector.push_back({ get_libs(line)[0], get_libs(line)[1] });
+			lib_file.push_back({ get_libs(line)[0], get_libs(line)[1] });
 		}
 	}
 
@@ -62,12 +94,63 @@ public:
 		return false;
 	}
 	
+	bool match_parent_child(string parent_lib_name, string child_lib_name,
+		vector<vector<string>>& lib_parent, vector<vector<string>>& lib_child)
+	{
+		for (int i = 0; i < lib_parent.size(); i++)
+		{
+			for (int k = 0; k < lib_child.size(); k++)
+			{
+				if (lib_child[k][0] == lib_parent[i][1])
+				{
+					if (PRINT_MATCH)
+					{
+						cout << "lib_child  index= " << k << "\n";
+						cout << "lib_parent index= " << i << "\n\n";
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	bool search_parent_child(string parent_lib_name, string child_lib_name, int parent_id,
+		vector<vector<string>>& lib_parent, vector<vector<string>>& lib_child)
+	{
+		if (PRINT_SEARCH)
+		{
+			cout << "Searching lib..\n";
+			cout << "parent lib = " << parent_lib_name << "\n";
+			cout << "child lib  = " << child_lib_name << "\n";
+			cout << "index      = " << parent_id << "\n\n";
+		}
+
+		for (int i = 0; i < lib_vector.size(); i++)
+		{
+			if (i == parent_id)
+				continue;
+
+			if (lib_vector[i][0] == parent_lib_name)
+				lib_parent.push_back(lib_vector[i]);
+
+			for (int k = 0; k < lib_vector[i].size(); k++)
+				if (lib_vector[i][k] == child_lib_name)
+					lib_child.push_back(lib_vector[i]);
+		}
+		return match_parent_child(parent_lib_name, child_lib_name, lib_parent, lib_child);
+	}
+
+
+
 	bool control_same_line(int row1, vector<vector<string>>& vector)
 	{
 		for (int i = 0; i < lib_vector.size(); i++)
 			if (lib_vector[row1] == vector[i])
 				return true;
 	}
+
+	
 	bool add_node_to_node(int idx)
 	{
 		// controls "x" row 
@@ -108,7 +191,7 @@ public:
 				lib_vector[idx].insert(lib_vector[idx].end(), lib_vector[parent_idx[i]].begin() + 1, lib_vector[parent_idx[i]].end());
 				return true;
 			}
-			cout << "\n";
+			//cout << "\n";
 		}
 
 		return false;
@@ -130,8 +213,18 @@ public:
 		lib_vector.push_back({ "2.h", "7.h" });                         // 11
 		lib_vector.push_back({ "2.h", "17.h" });                        // 12
 		lib_vector.push_back({ "4.h", "3.h", "1.h", "2.h" });           // 13
+		lib_vector.push_back({ "10.h", "11.h"});                        // 14
+		lib_vector.push_back({ "11.h", "12.h"});                        // 15
+		lib_vector.push_back({ "10.h", "12.h"});                        // 16
+		//lib_vector.push_back({ "10.h", "11.h", "12.h" });               // 17
 
-		//cout << boolalpha << line_circular_control(1, 0);
+		/*fill_temp();
+		int i = 7;
+		bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i, lib_parent, lib_child);
+
+		cout << boolalpha << is_delete;*/
+
+		cout << boolalpha << line_circular_control(1, 0);
 		//cout << boolalpha << row_control("2.h", "3.h", 7);
 	
 		
@@ -232,7 +325,7 @@ private:
 	}
 	bool circular_dependency_control(int row_idx)
 	{
-		cout << boolalpha << line_circular_control(1, 0);
+		//cout << boolalpha << line_circular_control(1, 0);
 
 		bool is_all_row = false;
 		for (int i = 0; i < lib_vector.size(); i++)
@@ -273,8 +366,11 @@ private:
 	}
 	
 	vector<vector<string>> lib_update; // efficient library list
+	vector<vector<string>> lib_file; // efficient library list
 	vector<vector<string>> lib_vector; // temp vector
 	vector<vector<string>> lib_deleted;
+	vector<vector<string>> lib_parent;
+	vector<vector<string>> lib_child;
 	vector <int> delete_idx;
 
 	std::ifstream file;
@@ -304,6 +400,6 @@ private:
 
 int main()
 {
-	Efficiency x("test.txt");
+	Efficiency x("dependency.txt");
 
 }
