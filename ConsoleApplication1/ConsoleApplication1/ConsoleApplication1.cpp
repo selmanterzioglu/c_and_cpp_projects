@@ -21,7 +21,6 @@ public:
 
 		//push_lib_from_file();
 		push_test_lib();
-		lib_temp = lib_vector;
 
 		//delete_lib();
 
@@ -31,6 +30,16 @@ public:
 		print_all_vector(lib_deleted);*/
 	}
 	
+	void fill_temp()
+	{
+		for (int i = 0; i < lib_vector.size(); i++)
+		{
+			if (line_circular_control(i, 0))
+				continue;
+
+			add_node_to_node(i);
+		}
+	}
 
 	void push_lib_from_file()
 	{
@@ -41,43 +50,25 @@ public:
 		}
 	}
 
-	//bool search_row(vector<vector<string>>&vector, string search_param, int idx, bool last_param_control)
 	bool search_row(vector<vector<string>>&vector, string search_param, int idx)
 	{
+		// search element on idx row. --> vector[idx] = {elem1, elem2};
+		// if found, return true
+
 		for (int i = 0; i < vector[idx].size(); i++)
 			if (vector[idx][i] == search_param)
-				//if (last_param_control && vector[idx][i] == vector[idx].back())
-					//return false;
-
 				return true;
 
 		return false;
 	}
-	int row_control(string parent_lib, string child_lib, int row_idx)
+	
+	bool control_same_line(int row1, vector<vector<string>>& vector)
 	{
-		int parent_index = -1;
-		int child_index = -1;
-
-		for (int i = 0; i < lib_temp.size(); i++)
-		{
-			if (i == row_idx)
-				continue;
-
-			for (int k = 0; k < lib_temp[i].size(); k++)
-			{
-				if (lib_temp[i][k] == child_lib)
-					child_index = k;
-				if (lib_temp[i][k] == parent_lib)
-					parent_index = k;
-				if (child_index != -1 && parent_index != -1 && parent_index < child_index)
-					return i;
-			}
-			parent_index = -1;
-			child_index = -1;
-		}
-		return -1;
+		for (int i = 0; i < lib_vector.size(); i++)
+			if (lib_vector[row1] == vector[i])
+				return true;
 	}
-	bool find_last_element(int idx)
+	bool add_node_to_node(int idx)
 	{
 		// controls "x" row 
 		// if last element is first element another row (y)
@@ -91,6 +82,9 @@ public:
 
 		for (int i = 0; i < lib_vector.size(); i++)
 		{
+			if(idx == i)
+				continue;
+
 			if (lib_vector[i].front() == search_lib)
 				parent_idx.push_back(i);
 		}
@@ -108,22 +102,22 @@ public:
 			}
 			if (all_elem_dif)
 			{
-				cout << "idx= " << idx << " row number: " << parent_idx[i] << "\n";
+				// push  current line to back, because this should't delete from vector.
+				lib_vector.push_back({ lib_vector[idx]});
 				// y row will  add  to x row here.
-				lib_vector[5].insert(lib_vector[5].end(), lib_vector[parent_idx[i]].begin() + 1, lib_vector[parent_idx[i]].end());
+				lib_vector[idx].insert(lib_vector[idx].end(), lib_vector[parent_idx[i]].begin() + 1, lib_vector[parent_idx[i]].end());
+				return true;
 			}
-
 			cout << "\n";
 		}
 
 		return false;
 	}
+	
 	void push_test_lib()
 	{
-
-		lib_vector.push_back({ "1.h", "2.h" });                         // 0
-		lib_vector.push_back({ "1.h", "2.h" });                         // 0
-		lib_vector.push_back({ "1.h", "2.h", "3.h" });                  // 1
+		lib_vector.push_back({ "1.h", "2.h", "3.h"});                   // 0
+		lib_vector.push_back({ "3.h", "1.h", "7.h"});                   // 1
 		lib_vector.push_back({ "1.h", "2.h", "17.h"});                  // 2
 		lib_vector.push_back({ "1.h", "2.h", "16.h", "17.h"});          // 3 
 		lib_vector.push_back({ "1.h", "2.h", "3.h", "17.h"});           // 4
@@ -137,58 +131,14 @@ public:
 		lib_vector.push_back({ "2.h", "17.h" });                        // 12
 		lib_vector.push_back({ "4.h", "3.h", "1.h", "2.h" });           // 13
 
-		
-
+		//cout << boolalpha << line_circular_control(1, 0);
 		//cout << boolalpha << row_control("2.h", "3.h", 7);
-
+	
+		
+		//print_all_vector(lib_vector);
+		//cout << boolalpha << add_node_to_node(5);
 		//print_all_vector(lib_vector);
 
-		//cout << boolalpha << find_last_element(5);
-		//print_all_vector(lib_vector);
-
-
-	}
-
-	bool circular_dependency_control(string parent, string child, int idx)
-	{
-		for (int i = 0; i < lib_vector.size(); i++)
-		{
-			if (i == idx)
-				continue;
-
-			if (lib_vector[i][0] == child && lib_vector[i][1] == parent)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	void delete_lib()
-	{
-		for (int i = 0; i < lib_vector.size(); i++)
-		{
-			bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i, lib_parent, lib_child);
-			bool is_cricular  = circular_dependency_control(lib_vector[i][0], lib_vector[i][1], i);
-			
-			cout <<	"id= "   << i << "\t";
-			cout <<	"is_cricular= " << boolalpha << is_cricular << "\t";
-			cout <<	"is_delete= "   << boolalpha << is_delete   << "\n";
-
-			if (is_cricular == false && is_delete == true)
-			{
-				lib_deleted.push_back({ lib_vector[i][0], lib_vector[i][1] });
-				delete_idx.push_back(i);
-
-				//lib_vector.erase(lib_vector.begin() + i);
-				//i = 0;
-			}
-
-			//for(auto i : delete_idx)
-			//{
-			//	cout << i <<"\n";
-			//}
-
-		}
 	}
 
 	static std::string* get_libs(std::string line)
@@ -219,54 +169,6 @@ public:
 		return libs;
 	}
 
-	bool match_parent_child(string parent_lib_name, string child_lib_name, 
-		vector<vector<string>>& lib_parent, vector<vector<string>>& lib_child)
-	{
-		for (int i = 0; i < lib_parent.size(); i++)
-		{
-			for (int k = 0; k < lib_child.size(); k++)
-			{
-				if (lib_child[k][0] == lib_parent[i][1])
-				{
-					if (PRINT_MATCH)
-					{
-						cout << "Founded match parent chield\n";
-						cout << "lib_child  index= " << k << "\n";
-						cout << "lib_parent index= " << i << "\n\n";
-					}
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	bool search_parent_child(string parent_lib_name, string child_lib_name, int parent_id,
-		vector<vector<string>>& lib_parent, vector<vector<string>>& lib_child)
-	{
-		if (PRINT_SEARCH)
-		{
-			cout << "Searching lib..\n";
-			cout << "parent lib = " << parent_lib_name << "\n";
-			cout << "child lib  = " << child_lib_name << "\n";
-			cout << "index      = " << parent_id << "\n\n";
-		}
-
-		for (int i = 0; i < lib_vector.size(); i++)
-		{
-			if (i == parent_id)
-				continue;
-
-			if (lib_vector[i][0] == parent_lib_name)
-				lib_parent.push_back(lib_vector[i]);
-
-			for (int k = 0; k < lib_vector[i].size(); k++)
-				if (lib_vector[i][k] == child_lib_name)
-					lib_child.push_back(lib_vector[i]);
-		}
-		return match_parent_child(parent_lib_name, child_lib_name, lib_parent, lib_child);
-	}
-
 	void print_all_vector(vector<vector<string>>& vector)
 	{
 		cout << "\n-----------------------------------\n";
@@ -284,6 +186,64 @@ public:
 	}
 
 private:
+
+	int row_recursive_control(string parent_lib, string child_lib, int current_line_idx, int compare_line_idx)
+	{
+		int parent_index = -1;
+		int child_index = -1;
+
+		for (int i = 0; i < lib_vector.size(); i++)
+		{
+			if (i == current_line_idx)
+				continue;
+
+			for (int k = 0; k < lib_vector[i].size(); k++)
+			{
+				if (lib_vector[i][k] == child_lib)
+					child_index = k;
+				if (lib_vector[i][k] == parent_lib)
+					parent_index = k;
+				if (child_index != -1 && parent_index != -1 && parent_index > child_index)
+					return i;
+			}
+			parent_index = -1;
+			child_index = -1;
+		}
+		return -1;
+	}
+
+	bool line_circular_control(int current_line_idx, int compare_line_idx)
+	{
+		for (int i = 0; i < lib_vector[current_line_idx].size(); i++)
+		{
+			for (int k = i + 1; k < lib_vector[current_line_idx].size(); k++)
+			{
+				//cout << "i = " << i << "\t";
+				//cout << "k = " << k << "\t";
+				//cout << "parent= " << lib_vector[current_line_idx][i];
+				//cout << " child= " << lib_vector[current_line_idx][k]; //<<"\n";
+
+				int recursive_dependency = row_recursive_control(lib_vector[current_line_idx][i], lib_vector[current_line_idx][k], current_line_idx, compare_line_idx);
+				if (recursive_dependency != -1)
+					return true;
+			}
+		}
+		return false;
+	}
+	bool circular_dependency_control(int row_idx)
+	{
+		cout << boolalpha << line_circular_control(1, 0);
+
+		bool is_all_row = false;
+		for (int i = 0; i < lib_vector.size(); i++)
+		{
+			bool is_cricular = line_circular_control(row_idx, i);
+			if (is_cricular)
+				is_all_row = true;
+		}
+		return is_all_row;
+	}
+
 	void delete_line()
 	{
 		/*
@@ -312,11 +272,8 @@ private:
 		cout << "*******************************\n";
 	}
 	
-	vector<vector<string>> lib_update;// efficient library list
-	vector<vector<string>> lib_vector;
-	vector<vector<string>> lib_temp;
-	vector<vector<string>> lib_parent;
-	vector<vector<string>> lib_child;
+	vector<vector<string>> lib_update; // efficient library list
+	vector<vector<string>> lib_vector; // temp vector
 	vector<vector<string>> lib_deleted;
 	vector <int> delete_idx;
 
@@ -345,165 +302,6 @@ private:
 	}
 };
 
-/*
-
-
-void test()
-{
-	vector<vector<string>> lib_vector;
-	//
-	//algoritma alternatifleri
-	//mehmet'i iceren bir listeye al.
-	//bu listedekilerle test'in icerdiklerini karsilastir.
-	//ayni olmasi durumunda mehmet'i sil.
-
-	lib_vector.push_back({ "fatih", "mehmet" });
-	lib_vector.push_back({ "ali", "mehmet" });
-
-	lib_vector.push_back({ "test", "ali" });
-	lib_vector.push_back({ "test", "fatma" });
-
-	lib_vector.push_back({ "test", "mehmet" });
-
-	//lib_vector.erase(lib_vector.begin() + 2);
-}
-
-vector<vector<string>> lib_vector;
-vector<vector<string>> lib_parent;
-vector<vector<string>> lib_child;
-
-bool match_parent_child(string parent_lib_name, string child_lib_name)
-{
-	for (int i = 0; i < lib_parent.size(); i++)
-	{
-		for (int k = 0; k < lib_child.size(); k++)
-		{
-			if (lib_child[k][0] == lib_parent[i][1])
-			{
-				if (PRINT_MATCH)
-				{
-					cout << "lib_child  index= " << k << "\n";
-					cout << "lib_parent index= " << i << "\n\n";
-				}
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-bool search_parent_child(string parent_lib_name, string child_lib_name, int parent_id)
-{
-	if (PRINT_SEARCH)
-	{
-		cout << "Searching lib..\n";
-		cout << "parent lib = " << parent_lib_name << "\n";
-		cout << "child lib  = " << child_lib_name << "\n";
-		cout << "index      = " << parent_id << "\n\n";
-	}
-
-	for (int i = 0; i < lib_vector.size(); i++)
-	{
-		if (i == parent_id)
-			continue;
-
-		if (lib_vector[i][0] == parent_lib_name)
-			lib_parent.push_back(lib_vector[i]);
-
-		for (int k = 0; k < lib_vector[i].size(); k++)
-			if (lib_vector[i][k] == child_lib_name)
-				lib_child.push_back(lib_vector[i]);
-	}
-	return match_parent_child(parent_lib_name, child_lib_name);
-}
-void test_push_back()
-{
-	lib_vector.push_back({ "fatih", "mehmet" });
-	lib_vector.push_back({ "ali", "mehmet" });
-	lib_vector.push_back({ "test", "ali" });
-	lib_vector.push_back({ "test", "mehmet" }); // unneccessary 
-	lib_vector.push_back({ "test", "ayse" });   // unneccessary 
-	lib_vector.push_back({ "fatih", "ayse" });
-}
-
-void print_all_vector(bool all_list, bool parent_list, bool child_list)
-{
-	if (all_list)
-	{
-		cout << "all list\n";
-		for (int i = 0; i < lib_vector.size(); i++) {
-			for (int j = 0; j < lib_vector[i].size(); j++)
-				std::cout << "[" << i << "][" << j << "]" << lib_vector[i][j] << "\t";
-			cout << "\n";
-		}
-	}
-	if (parent_list)
-	{
-		cout << "\nparent list\n";
-		for (int i = 0; i < lib_parent.size(); i++) {
-			for (int j = 0; j < lib_parent[i].size(); j++)
-				std::cout << "[" << i << "][" << j << "]" << lib_parent[i][j] << "\t";
-			cout << "\n";
-		}
-	}
-	if (child_list)
-	{
-		cout << "\nchild list\n";
-		for (int i = 0; i < lib_child.size(); i++) {
-			for (int j = 0; j < lib_child[i].size(); j++)
-				std::cout << "[" << i << "][" << j << "]" << lib_child[i][j] << "\t";
-			cout << "\n";
-		}
-	}
-	cout << "\n\n";
-
-	//for (int i = 0; i < lib_vector.size(); i++) {
-	//    for (int j = 0; j < lib_vector[i].size(); j++)
-	//        std::cout << lib_vector[i][j] << "\t[" << i << "][" << j << "]\n";
-	//}
-
-}
-
-int main()
-{
-	//std::string line =  "\"ChannelHandler.h\" -> \"GmdssEnums.h\"";
-	//Efficiency x("dependency.txt");
-
-
-	//test_push_back();
-	//
-	//print_all_vector(true,false,false);
-
-	//for (int i = 0; i < lib_vector.size(); i++)
-	//{
-	//    bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i);
-	//    if (is_delete)
-	//        lib_vector.erase(lib_vector.begin() + 3);
-	//}
-
-	//print_all_vector(true,false,false);
-}
-
-*/
-
-
-
-bool recursive_control(vector<vector<string>>& vector, int idx, string parent, string child)
-{
-	for (int i = 0; i < vector[idx].size(); i++)
-	{
-		for (int k = 0; k < vector.size(); k++)
-		{
-			if (k == idx)
-				continue;
-			if (vector[k][0] == child, vector[k][1] == parent)
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
 int main()
 {
 	Efficiency x("test.txt");
