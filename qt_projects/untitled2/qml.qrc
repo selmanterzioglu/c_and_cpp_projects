@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>Dial.qml</file>
+        <file>background.png</file>
+        <file>needle.png</file>
+        <file>needle_shadow.png</file>
+    </qresource>
+</RCC>

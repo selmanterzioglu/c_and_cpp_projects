@@ -1,0 +1,11 @@
+# ninja log v5
+2	220	6895219927256679	untitled1_autogen/timestamp	3a27d32c29fb5363
+2	220	6895219927256679	untitled1_autogen/mocs_compilation.cpp	3a27d32c29fb5363
+2	220	6895219927256679	C:/Users/Selman/Desktop/Workspace/c_and_cpp_projects/qt_projects/build-untitled1-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/untitled1_autogen/timestamp	3a27d32c29fb5363
+2	220	6895219927256679	C:/Users/Selman/Desktop/Workspace/c_and_cpp_projects/qt_projects/build-untitled1-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/untitled1_autogen/mocs_compilation.cpp	3a27d32c29fb5363
+221	290	6895219928583148	untitled1_autogen/EWIEGA46WW/qrc_qml.cpp	15b970925f7f5ead
+221	290	6895219928583148	C:/Users/Selman/Desktop/Workspace/c_and_cpp_projects/qt_projects/build-untitled1-Desktop_Qt_5_15_2_MinGW_32_bit-Debug/untitled1_autogen/EWIEGA46WW/qrc_qml.cpp	15b970925f7f5ead
+291	395	6895219929660278	CMakeFiles/untitled1.dir/untitled1_autogen/mocs_compilation.cpp.obj	429133d013a13c37
+299	397	6895219929660278	CMakeFiles/untitled1.dir/untitled1_autogen/EWIEGA46WW/qrc_qml.cpp.obj	ba71d9d759f4543c
+295	1853	6895219944246967	CMakeFiles/untitled1.dir/main.cpp.obj	35b77c5d90e738dc
+1856	1991	6895219945600980	untitled1.exe	ded533c640129f42

@@ -15,6 +15,7 @@ class Efficiency {
 public:
 	Efficiency(std::string file_name) : file_name(file_name)
 	{
+
 		file.open(this->file_name, ios::in);
 		if (!file.is_open())
 			std::cout << "file is not open \n";
@@ -69,8 +70,8 @@ public:
 			add_node = add_node_to_node(i);
 		}
 
-		if (add_node)
-			fill_temp();
+		/*if (add_node)
+			fill_temp();*/
 	}
 
 	void push_lib_from_file()

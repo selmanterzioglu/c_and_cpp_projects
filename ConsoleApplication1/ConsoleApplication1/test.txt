@@ -1,0 +1,4 @@
+"test1.h" -> "test2.h";
+	"test1.h" -> "test3.h";
+	"test2.h" -> "test3.h";
+	"test3.h" -> "test1.h";
