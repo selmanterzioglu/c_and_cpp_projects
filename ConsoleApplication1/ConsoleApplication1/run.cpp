@@ -7,7 +7,6 @@
 #include <algorithm>
 
 #define PRINT_MATCH false
-#define PRINT_SEARCH false
 
 using namespace std;
 
@@ -400,34 +399,6 @@ private:
 		return is_all_row;
 	}
 
-	void delete_line()
-	{
-		/*
-			this function will delete included library from file 
-		*/
-
-		string str = "selman tercioglu\nahmet deneme\ntest\n";
-		cout << "*******************************\n";
-		cout << str << "";
-		cout << "*******************************\n";
-
-		size_t nFPos = str.find("selman tercioglu");
-		//size_t nFPos = test.find("selman tercioglu");
-		size_t secondNL = str.find('\n', nFPos);
-		size_t firstNL = str.rfind('\n', nFPos);
-
-		if (firstNL == string::npos)
-		{
-			firstNL = 0;
-			str.erase(firstNL, secondNL + 1 - firstNL);
-		}
-		else {
-			str.erase(firstNL, secondNL - firstNL);
-		}
-		cout << str << "";
-		cout << "*******************************\n";
-	}
-	
 	vector<vector<string>> lib_update; // efficient library list
 	vector<vector<string>> lib_file; // efficient library list
 	vector<vector<string>> lib_vector; // temp vector
@@ -463,10 +434,8 @@ private:
 
 int main()
 {
-
 	std::cout << "[INFO]: Program is running...\n";
-	//Efficiency x("dependency.txt");
-	Efficiency x("test.txt");
+	Efficiency x("dependency.txt");
+	//Efficiency x("test.txt");
 	std::cout << "[INFO]: Program ended! \n\n";
-
 }
