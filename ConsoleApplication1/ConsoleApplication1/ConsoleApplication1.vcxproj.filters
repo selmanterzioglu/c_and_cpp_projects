@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleApplication1.cpp">
+    <ClCompile Include="test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="run.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,43 +29,8 @@
     <Text Include="output.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="deleted_lib.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="test.txt">
       <Filter>Resource Files</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="lib1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib5.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib6.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib7.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib8.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib9.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib10.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
