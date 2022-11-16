@@ -46,9 +46,6 @@ public:
 			int is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i);
 			bool is_cricular = circular_dependency_control(i);
 
-			if(is_delete!=-1)
-				cout << "i: " << i << "\n";
-
 			if (is_cricular == false && is_delete != -1)
 				lib_deleted.push_back(lib_file[i]);
 			else
@@ -164,8 +161,11 @@ public:
 			{
 				//cout << parent_idx << "\t" << child_idx << "\n";
 				//cout << "row_idx: " << i << " parent_idx: " << parent_idx << " child_idx: " << child_idx << " i: " << i << "\n";
+				/*
 				cout << "[DEBUG]: Deleted: " << lib_vector[i][parent_idx] << " " << lib_vector[i][child_idx] << " i: " << i << "\n";
 				cout << "i: " << parent_id << "\n";
+				*/
+				
 				//cout << "row_idx: " << i << " parent_lib: " << lib_vector[i][parent_idx] << " child_idx: " << lib_vector[i][child_idx] << " i: " << i << "\n";
 				return parent_id;
 			}
@@ -341,20 +341,6 @@ public:
 				int size = static_cast <int>(vector[i][j].length());
 				//std::cout << "[" << i << "][" << j << "] " << vector[i][j] << setw(50 - size) << " ";
 				std::cout << "[" << i << "][" << j << "] " << vector[i][j] << setw(size) << " ";
-			}
-			cout << "\n";
-		}
-		cout << "\n";
-		cout << "[INFO]: Vector Size= " << lib_vector.size() << "\n";
-		cout << "\n-----------------------------------\n";
-	}
-	void print_int_vectors(vector<vector<int>>& vector)
-	{
-		cout << "\n-----------------------------------\n";
-		for (int i = 0; i < vector.size(); i++) {
-			for (int j = 0; j < vector[i].size(); j++)
-			{
-				std::cout << "[" << i << "][" << j << "] " << vector[i][j] << "  ";
 			}
 			cout << "\n";
 		}
