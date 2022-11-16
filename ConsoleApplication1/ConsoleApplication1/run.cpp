@@ -116,27 +116,6 @@ public:
 		return false;
 	}
 	
-	bool match_parent_child(string parent_lib_name, string child_lib_name,
-		vector<vector<string>>& lib_parent, vector<vector<string>>& lib_child)
-	{
-		for (int i = 0; i < lib_parent.size(); i++)
-		{
-			for (int k = 0; k < lib_child.size(); k++)
-			{
-				if (lib_child[k][0] == lib_parent[i][1])
-				{
-					if (PRINT_MATCH)
-					{
-						cout << "lib_child  index= " << k << "\n";
-						cout << "lib_parent index= " << i << "\n\n";
-					}
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	int search_parent_child(string parent_lib_name, string child_lib_name, int parent_id)
 	{
 		
@@ -400,12 +379,9 @@ private:
 	}
 
 	vector<vector<string>> lib_update; // efficient library list
-	vector<vector<string>> lib_file; // efficient library list
+	vector<vector<string>> lib_file;   // readed library list from file
 	vector<vector<string>> lib_vector; // temp vector
 	vector<vector<string>> lib_deleted;
-	vector<vector<string>> lib_parent;
-	vector<vector<string>> lib_child;
-	vector <int> delete_idx;
 
 	std::ifstream file;
 	std::string file_name{};
