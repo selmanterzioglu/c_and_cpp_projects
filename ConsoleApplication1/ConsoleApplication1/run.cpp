@@ -13,6 +13,7 @@ using namespace std;
 
 class Efficiency {
 public:
+
 	Efficiency(std::string file_name) : file_name(file_name)
 	{
 
@@ -21,20 +22,14 @@ public:
 			std::cout << "file is not open \n";
 
 
-
-		push_lib_from_file();
-		
 		//push_test_lib();
 
-		//delete_lib();
+		push_lib_from_file();
 		lib_vector = lib_file;
 		fill_temp();
 		run_algorithm();
-
 		write_to_file("output.txt", lib_update);
 		write_to_file("deleted_lib.txt", lib_deleted);
-
-		//print_all_vector(lib_deleted);
 		cout << "Before   size= " << lib_file.size() << "\n";
 		cout << "Deleted  size= " << lib_deleted.size() << "\n";
 		cout << "After    size= " << lib_update.size() << "\n";
@@ -44,34 +39,70 @@ public:
 	{
 		for (int i = 0; i < lib_file.size(); i++)
 		{
+
+			/*cout << lib_parent.size() << "\n";
+			cout << lib_child.size() << "\n";*/
+
 			bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i, lib_parent, lib_child);
 			bool is_cricular = circular_dependency_control(i);
 
-			if (is_cricular == false && is_delete == true)
+			//if (is_cricular == false && is_delete == true)
+			if (!is_delete)
 				lib_deleted.push_back(lib_file[i]);
 			else
 				lib_update.push_back(lib_file[i]);
 		}
 	}
+
+	bool is_add_node = false;
+	bool is_same_line = false;
+
 	void fill_temp()
 	{
-		bool add_node = false;
-
-		const int size = lib_vector.size();
+		int size = lib_vector.size();
 		for (int i = 0; i < size; i++)
 		{
+			cout << "lib_vector.size(): " << lib_vector.size() << "\n";
+			cout << "lib_vector: ";
+			print_all_vector(lib_vector);
 
-			if (line_circular_control(i, 0))
+			if (line_circular_control(i))
 				continue;
 
-			if (control_same_line(i, lib_vector))
-				continue;
+			is_same_line = control_same_line(i, lib_vector);
 
-			add_node = add_node_to_node(i);
+			if (is_same_line)
+			{
+				lib_vector.erase(lib_vector.begin() + i);
+				cout << "same  line detected !! idx= ["<< i << "] \n";
+				
+				cout << "is_add_node:  " << boolalpha << is_add_node << "\n";
+				cout << "is_same_line: " << boolalpha << is_same_line << "\n";
+
+				(void*)getchar();
+				fill_temp();
+				continue;
+			}
+
+			is_add_node = add_node_to_node(i);
+			
+			if (is_add_node)
+			{
+				cout << "add_note is true! id= " << i << "\n";
+
+				cout << "is_add_node:  " << boolalpha << is_add_node << "\n";
+				cout << "is_same_line: " << boolalpha << is_same_line << "\n";
+
+				(void*)getchar();
+				fill_temp();
+			}
+
+			if (is_add_node && is_same_line)
+				cout << "ikiside true";
 		}
-
-		/*if (add_node)
-			fill_temp();*/
+		
+		cout << "\n\n\n\nfill_temp func ended..!!!!\n";
+		(void*)getchar();
 	}
 
 	void push_lib_from_file()
@@ -144,14 +175,41 @@ public:
 
 
 
-	bool control_same_line(int row1, vector<vector<string>>& vector)
+	bool control_same_line(int row_id, vector<vector<string>>& vector)
 	{
 		for (int i = 0; i < lib_vector.size(); i++)
-			if (lib_vector[row1] == vector[i])
+		{
+			if (row_id == i)
+				continue;
+
+			if (lib_vector[row_id] == vector[i])
 				return true;
+		}
+		return false;
 	}
 
-	
+	bool control_vectors_line(vector<vector<string>>& current_vector, vector<vector<string>>& compare_vector, int compare_id)
+	{
+		for (int i = 0; i < current_vector.size(); i++)
+		{
+			if (current_vector[i].size() != compare_vector[compare_id].size())
+				continue;
+
+			int counter = 0;
+
+			for (int k = 0; k < current_vector[i].size(); k++)
+				if (current_vector[i][k] == compare_vector[compare_id][k])
+					++counter;
+
+			if (counter == current_vector[i].size())
+			{
+				cout << "ayni eleman tespit edildi \n";
+				return true;
+			}
+		}
+		return false;
+	}
+		
 	bool add_node_to_node(int idx)
 	{
 		// controls "x" row 
@@ -187,9 +245,30 @@ public:
 			if (all_elem_dif)
 			{
 				// push  current line to back, because this should't delete from vector.
-				lib_vector.push_back({ lib_vector[idx]});
+				//lib_vector.push_back({ lib_vector[idx]});
+
+				vector <vector<string>> temp;
+
+				temp.push_back({ lib_vector[idx]});
+				int temp_size = temp.size() -1;
+				temp[temp_size].insert(temp[temp_size].end(), lib_vector[parent_idx[i]].begin() + 1, lib_vector[parent_idx[i]].end());
+
+				if (control_vectors_line(lib_vector, temp, temp_size))
+					return false;
+				else
+				{
+					cout << "elemanlar ayni degil. sona ekleme gerceklesti...\n";
+					lib_vector.push_back({temp[temp_size]});
+					return true;
+				}
+
+				//lib_vector[idx].insert(lib_vector[idx].end(), lib_vector[parent_idx[i]].begin() + 1, lib_vector[parent_idx[i]].end());
+				//cout << "last_size: " << temp.size();
+
+
+
 				// y row will  add  to x row here.
-				lib_vector[idx].insert(lib_vector[idx].end(), lib_vector[parent_idx[i]].begin() + 1, lib_vector[parent_idx[i]].end());
+				//lib_vector[idx].insert(lib_vector[idx].end(), lib_vector[parent_idx[i]].begin() + 1, lib_vector[parent_idx[i]].end());
 				return true;
 			}
 			//cout << "\n";
@@ -218,20 +297,8 @@ public:
 		lib_vector.push_back({ "11.h", "12.h"});                        // 15
 		lib_vector.push_back({ "10.h", "12.h"});                        // 16
 		//lib_vector.push_back({ "10.h", "11.h", "12.h" });               // 17
-
-		/*fill_temp();
-		int i = 7;
-		bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i, lib_parent, lib_child);
-
-		cout << boolalpha << is_delete;*/
-
-		cout << boolalpha << line_circular_control(1, 0);
-		//cout << boolalpha << row_control("2.h", "3.h", 7);
-	
-		
-		//print_all_vector(lib_vector);
-		//cout << boolalpha << add_node_to_node(5);
-		//print_all_vector(lib_vector);
+		lib_vector.erase(lib_vector.begin() + 1);
+		print_all_vector(lib_vector);
 
 	}
 
@@ -270,54 +337,48 @@ public:
 			for (int j = 0; j < vector[i].size(); j++)
 			{
 				int size = static_cast <int>(vector[i][j].length());
-				std::cout << "[" << i << "][" << j << "]" << vector[i][j] << setw(50 - size) << " ";
+				//std::cout << "[" << i << "][" << j << "] " << vector[i][j] << setw(50 - size) << " ";
+				std::cout << "[" << i << "][" << j << "] " << vector[i][j] << setw(size) << " ";
 			}
 			cout << "\n";
 		}
 		cout << "\n";
 		cout << "[INFO]: Vector Size= " << lib_vector.size() << "\n";
-		cout << "---------------------------------------------------";
+		cout << "\n-----------------------------------\n";
 	}
 
 private:
 
-	int row_recursive_control(string parent_lib, string child_lib, int current_line_idx, int compare_line_idx)
+	int row_recursive_control(string parent_lib, string child_lib, int current_line_idx)
 	{
 		int parent_index = -1;
 		int child_index = -1;
 
-		for (int i = 0; i < lib_vector.size(); i++)
+		for (int i = 0; i < lib_vector[current_line_idx].size(); i++)
 		{
-			if (i == current_line_idx)
-				continue;
-
-			for (int k = 0; k < lib_vector[i].size(); k++)
-			{
-				if (lib_vector[i][k] == child_lib)
-					child_index = k;
-				if (lib_vector[i][k] == parent_lib)
-					parent_index = k;
-				if (child_index != -1 && parent_index != -1 && parent_index > child_index)
-					return i;
-			}
+			if (lib_vector[current_line_idx][i] == child_lib)
+				child_index = i;
+			if (lib_vector[current_line_idx][i] == parent_lib)
+				parent_index = i;
+			if (child_index != -1 && parent_index != -1 && parent_index > child_index)
+				return i;
 			parent_index = -1;
 			child_index = -1;
 		}
 		return -1;
 	}
 
-	bool line_circular_control(int current_line_idx, int compare_line_idx)
+	bool line_circular_control(int current_line_idx)
 	{
 		for (int i = 0; i < lib_vector[current_line_idx].size(); i++)
 		{
+			if (i == current_line_idx)
+				continue;
+
 			for (int k = i + 1; k < lib_vector[current_line_idx].size(); k++)
 			{
-				//cout << "i = " << i << "\t";
-				//cout << "k = " << k << "\t";
-				//cout << "parent= " << lib_vector[current_line_idx][i];
-				//cout << " child= " << lib_vector[current_line_idx][k]; //<<"\n";
+				int recursive_dependency = row_recursive_control(lib_vector[current_line_idx][i], lib_vector[current_line_idx][k], k);
 
-				int recursive_dependency = row_recursive_control(lib_vector[current_line_idx][i], lib_vector[current_line_idx][k], current_line_idx, compare_line_idx);
 				if (recursive_dependency != -1)
 					return true;
 			}
@@ -326,12 +387,11 @@ private:
 	}
 	bool circular_dependency_control(int row_idx)
 	{
-		//cout << boolalpha << line_circular_control(1, 0);
-
 		bool is_all_row = false;
 		for (int i = 0; i < lib_vector.size(); i++)
 		{
-			bool is_cricular = line_circular_control(row_idx, i);
+			bool is_cricular = line_circular_control(row_idx);
+
 			if (is_cricular)
 				is_all_row = true;
 		}
@@ -401,6 +461,19 @@ private:
 
 int main()
 {
-	Efficiency x("dependency.txt");
 
+	std::cout << "[INFO]: Program is running...\n";
+	Efficiency x("test.txt");
+	std::cout << "[INFO]: Program ended! \n\n";
+
+	//vector <vector<string>> vector1;
+	//vector <vector<string>> vector2;
+
+	//vector1.push_back({ "ahmet", "selman" });     // 0
+	//vector1.push_back({ "selman", "tercioglu" }); // 1
+
+
+	//vector2.push_back({ "selman", "tercioglu" }); // 1
+
+	
 }

@@ -23,9 +23,11 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="deleted_lib.txt" />
     <Text Include="dependency.txt" />
     <Text Include="output.txt" />
     <Text Include="test.txt" />
+    <Text Include="test2.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
