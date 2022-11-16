@@ -27,6 +27,7 @@ public:
 		push_lib_from_file();
 		lib_vector = lib_file;
 		delete_same_line();
+		lib_file = lib_vector;
 		fill_temp();
 		run_algorithm();
 		write_to_file("output.txt", lib_update);
@@ -49,7 +50,7 @@ public:
 				cout << "i: " << i << "\n";
 
 			if (is_cricular == false && is_delete != -1)
-				lib_deleted.push_back(lib_vector[i]);
+				lib_deleted.push_back(lib_file[i]);
 			else
 				lib_update.push_back(lib_file[i]);
 			
