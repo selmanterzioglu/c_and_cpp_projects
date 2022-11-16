@@ -25,6 +25,8 @@
   <ItemGroup>
     <Text Include="deleted_lib.txt" />
     <Text Include="dependency.txt" />
+    <Text Include="lib_vector.txt" />
+    <Text Include="out.txt" />
     <Text Include="output.txt" />
     <Text Include="test.txt" />
     <Text Include="test2.txt" />

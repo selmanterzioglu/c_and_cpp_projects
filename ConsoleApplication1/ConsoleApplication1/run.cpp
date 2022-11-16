@@ -26,10 +26,12 @@ public:
 
 		push_lib_from_file();
 		lib_vector = lib_file;
+		delete_same_line();
 		fill_temp();
 		run_algorithm();
 		write_to_file("output.txt", lib_update);
 		write_to_file("deleted_lib.txt", lib_deleted);
+		write_to_file("lib_vector.txt", lib_vector);
 		cout << "Before   size= " << lib_file.size() << "\n";
 		cout << "Deleted  size= " << lib_deleted.size() << "\n";
 		cout << "After    size= " << lib_update.size() << "\n";
@@ -37,72 +39,63 @@ public:
 	}
 	void run_algorithm()
 	{
+		//(void*)getchar();
 		for (int i = 0; i < lib_file.size(); i++)
 		{
-
-			/*cout << lib_parent.size() << "\n";
-			cout << lib_child.size() << "\n";*/
-
-			bool is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i, lib_parent, lib_child);
+			int is_delete = search_parent_child(lib_vector[i][0], lib_vector[i][1], i);
 			bool is_cricular = circular_dependency_control(i);
 
-			//if (is_cricular == false && is_delete == true)
-			if (!is_delete)
-				lib_deleted.push_back(lib_file[i]);
+			if(is_delete!=-1)
+				cout << "i: " << i << "\n";
+
+			if (is_cricular == false && is_delete != -1)
+				lib_deleted.push_back(lib_vector[i]);
 			else
 				lib_update.push_back(lib_file[i]);
+			
+			is_delete = false;
 		}
 	}
 
 	bool is_add_node = false;
 	bool is_same_line = false;
 
+	void delete_same_line()
+	{
+		int size = lib_vector.size();
+		bool same = false;
+		vector<vector<string>> tmp;
+
+		for (int i = 0; i < lib_vector.size(); i++)
+		{
+			same = control_same_line(i, lib_vector);
+			if (!same)
+				tmp.push_back({lib_vector[i]});
+		}
+		lib_vector = tmp;
+	}
+
 	void fill_temp()
 	{
 		int size = lib_vector.size();
+
 		for (int i = 0; i < size; i++)
 		{
-			cout << "lib_vector.size(): " << lib_vector.size() << "\n";
-			cout << "lib_vector: ";
-			print_all_vector(lib_vector);
+			is_add_node = false;
+			is_same_line = false;
 
 			if (line_circular_control(i))
 				continue;
-
-			is_same_line = control_same_line(i, lib_vector);
-
-			if (is_same_line)
-			{
-				lib_vector.erase(lib_vector.begin() + i);
-				cout << "same  line detected !! idx= ["<< i << "] \n";
-				
-				cout << "is_add_node:  " << boolalpha << is_add_node << "\n";
-				cout << "is_same_line: " << boolalpha << is_same_line << "\n";
-
-				(void*)getchar();
-				fill_temp();
-				continue;
-			}
 
 			is_add_node = add_node_to_node(i);
 			
 			if (is_add_node)
 			{
-				cout << "add_note is true! id= " << i << "\n";
-
-				cout << "is_add_node:  " << boolalpha << is_add_node << "\n";
-				cout << "is_same_line: " << boolalpha << is_same_line << "\n";
-
-				(void*)getchar();
+				//(void*)getchar();
 				fill_temp();
 			}
-
-			if (is_add_node && is_same_line)
-				cout << "ikiside true";
 		}
-		
-		cout << "\n\n\n\nfill_temp func ended..!!!!\n";
-		(void*)getchar();
+		//(void*)getchar();
 	}
 
 	void push_lib_from_file()
@@ -147,37 +140,45 @@ public:
 		return false;
 	}
 
-	bool search_parent_child(string parent_lib_name, string child_lib_name, int parent_id,
-		vector<vector<string>>& lib_parent, vector<vector<string>>& lib_child)
+	int search_parent_child(string parent_lib_name, string child_lib_name, int parent_id)
 	{
-		if (PRINT_SEARCH)
-		{
-			cout << "Searching lib..\n";
-			cout << "parent lib = " << parent_lib_name << "\n";
-			cout << "child lib  = " << child_lib_name << "\n";
-			cout << "index      = " << parent_id << "\n\n";
-		}
+		
+		vector <vector<string>> temp_vec;
+		//cout << "parent_lib_name: " << parent_lib_name << " child_lib_name: " << child_lib_name << "\n";
 
+		int parent_idx = -1;
+		int child_idx = -1;
+		
 		for (int i = 0; i < lib_vector.size(); i++)
 		{
-			if (i == parent_id)
-				continue;
-
-			if (lib_vector[i][0] == parent_lib_name)
-				lib_parent.push_back(lib_vector[i]);
-
 			for (int k = 0; k < lib_vector[i].size(); k++)
-				if (lib_vector[i][k] == child_lib_name)
-					lib_child.push_back(lib_vector[i]);
+			{
+				if (lib_vector[i][k] == parent_lib_name)
+					parent_idx = k;
+
+				else if (lib_vector[i][k] == child_lib_name)
+					child_idx = k;
+			}
+			if (parent_idx != -1 && child_idx != -1 && parent_idx < child_idx-1)
+			{
+				//cout << parent_idx << "\t" << child_idx << "\n";
+				//cout << "row_idx: " << i << " parent_idx: " << parent_idx << " child_idx: " << child_idx << " i: " << i << "\n";
+				cout << "[DEBUG]: Deleted: " << lib_vector[i][parent_idx] << " " << lib_vector[i][child_idx] << " i: " << i << "\n";
+				cout << "i: " << parent_id << "\n";
+				//cout << "row_idx: " << i << " parent_lib: " << lib_vector[i][parent_idx] << " child_idx: " << lib_vector[i][child_idx] << " i: " << i << "\n";
+				return parent_id;
+			}
+
+			parent_idx = -1;
+			child_idx = -1;
 		}
-		return match_parent_child(parent_lib_name, child_lib_name, lib_parent, lib_child);
+
+		return -1;
 	}
-
-
 
 	bool control_same_line(int row_id, vector<vector<string>>& vector)
 	{
-		for (int i = 0; i < lib_vector.size(); i++)
+		for (int i = row_id; i < lib_vector.size(); i++)
 		{
 			if (row_id == i)
 				continue;
@@ -203,7 +204,7 @@ public:
 
 			if (counter == current_vector[i].size())
 			{
-				cout << "ayni eleman tespit edildi \n";
+				//cout << "ayni eleman tespit edildi \n";
 				return true;
 			}
 		}
@@ -257,7 +258,7 @@ public:
 					return false;
 				else
 				{
-					cout << "elemanlar ayni degil. sona ekleme gerceklesti...\n";
+					//cout << "elemanlar ayni degil. sona ekleme gerceklesti...\n";
 					lib_vector.push_back({temp[temp_size]});
 					return true;
 				}
@@ -271,6 +272,8 @@ public:
 				//lib_vector[idx].insert(lib_vector[idx].end(), lib_vector[parent_idx[i]].begin() + 1, lib_vector[parent_idx[i]].end());
 				return true;
 			}
+
+			
 			//cout << "\n";
 		}
 
@@ -297,8 +300,6 @@ public:
 		lib_vector.push_back({ "11.h", "12.h"});                        // 15
 		lib_vector.push_back({ "10.h", "12.h"});                        // 16
 		//lib_vector.push_back({ "10.h", "11.h", "12.h" });               // 17
-		lib_vector.erase(lib_vector.begin() + 1);
-		print_all_vector(lib_vector);
 
 	}
 
@@ -339,6 +340,20 @@ public:
 				int size = static_cast <int>(vector[i][j].length());
 				//std::cout << "[" << i << "][" << j << "] " << vector[i][j] << setw(50 - size) << " ";
 				std::cout << "[" << i << "][" << j << "] " << vector[i][j] << setw(size) << " ";
+			}
+			cout << "\n";
+		}
+		cout << "\n";
+		cout << "[INFO]: Vector Size= " << lib_vector.size() << "\n";
+		cout << "\n-----------------------------------\n";
+	}
+	void print_int_vectors(vector<vector<int>>& vector)
+	{
+		cout << "\n-----------------------------------\n";
+		for (int i = 0; i < vector.size(); i++) {
+			for (int j = 0; j < vector[i].size(); j++)
+			{
+				std::cout << "[" << i << "][" << j << "] " << vector[i][j] << "  ";
 			}
 			cout << "\n";
 		}
@@ -463,17 +478,8 @@ int main()
 {
 
 	std::cout << "[INFO]: Program is running...\n";
+	//Efficiency x("dependency.txt");
 	Efficiency x("test.txt");
 	std::cout << "[INFO]: Program ended! \n\n";
 
-	//vector <vector<string>> vector1;
-	//vector <vector<string>> vector2;
-
-	//vector1.push_back({ "ahmet", "selman" });     // 0
-	//vector1.push_back({ "selman", "tercioglu" }); // 1
-
-
-	//vector2.push_back({ "selman", "tercioglu" }); // 1
-
-	
 }
