@@ -14,7 +14,7 @@ Window {
         id: dial
         anchors.centerIn: parent
         //value: slider.x * 100 / (container.width - 32)
-        value: 60
+        value: 0
     }
 
 

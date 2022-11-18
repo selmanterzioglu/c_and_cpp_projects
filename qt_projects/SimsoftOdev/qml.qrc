@@ -2,10 +2,10 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Dial.qml</file>
-        <file>assets/dial/background.png</file>
         <file>assets/dial/needle.png</file>
         <file>assets/dial/needle_shadow.png</file>
         <file>assets/dial/overlay.png</file>
         <file>Circle.qml</file>
+        <file>assets/dial/background.png</file>
     </qresource>
 </RCC>
