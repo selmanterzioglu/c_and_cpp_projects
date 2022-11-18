@@ -11,7 +11,7 @@ Item {
         id: needle
         x: 98; y: 33
         antialiasing: true
-        source: "./assets/dial/needle.png"
+        //source: "./assets/dial/needle.png"
         transform: Rotation {
             id: needleRotation
             origin.x: 5; origin.y: 65
