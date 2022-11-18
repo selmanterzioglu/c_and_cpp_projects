@@ -20,21 +20,20 @@ public:
 		if (!file.is_open())
 			std::cout << "file is not open \n";
 
-
-		//push_test_lib();
+		//push_test_lib(); // test another scenario using this method.
 
 		push_lib_from_file();
 		lib_vector = lib_file;
-		delete_same_line();
-		lib_file = lib_vector;
-		fill_temp();
-		run_algorithm();
-		write_to_file("output.txt", lib_update);
-		write_to_file("deleted_lib.txt", lib_deleted);
-		write_to_file("lib_vector.txt", lib_vector);
-		cout << "Before   size= " << lib_file.size() << "\n";
-		cout << "Deleted  size= " << lib_deleted.size() << "\n";
-		cout << "After    size= " << lib_update.size() << "\n";
+		delete_same_line(); 
+		lib_file = lib_vector; // because lines push lib_vector without sameline.
+		fill_temp(); 
+		run_algorithm(); 
+		write_to_file("output.txt", lib_update); // writes efficient lib 
+		write_to_file("deleted_lib.txt", lib_deleted); // writes deleted lib 
+		write_to_file("lib_vector.txt", lib_vector); // writes lib that contains all node
+		cout << "Before   size= " << lib_file.size() << "\n"; // display size before running algorithm
+		cout << "Deleted  size= " << lib_deleted.size() << "\n"; // display deleted library size
+		cout << "After    size= " << lib_update.size() << "\n";// display size after running algorithm
 
 	}
 	void run_algorithm()
@@ -59,6 +58,7 @@ public:
 
 	void delete_same_line()
 	{
+		// if found same line, this method remove them.
 		int size = lib_vector.size();
 		bool same = false;
 		vector<vector<string>> tmp;
@@ -74,6 +74,7 @@ public:
 
 	void fill_temp()
 	{
+		// add node to end of node 
 		int size = lib_vector.size();
 
 		for (int i = 0; i < size; i++)
