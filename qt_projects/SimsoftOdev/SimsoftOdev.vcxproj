@@ -84,9 +84,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <None Include="Circle.qml" />
-    <None Include="Dial.qml" />
-    <None Include="row.qml" />
+    <None Include="Dial_motors.qml" />
     <QtRcc Include="qml.qrc" />
     <None Include="main.qml" />
   </ItemGroup>

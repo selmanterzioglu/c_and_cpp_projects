@@ -39,13 +39,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="row.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Dial.qml">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Circle.qml">
+    <None Include="Dial_motors.qml">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
