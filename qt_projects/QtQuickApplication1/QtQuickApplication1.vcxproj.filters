@@ -32,15 +32,6 @@
     <None Include="main.qml">
       <Filter>Source Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="simsoft.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Dial_motors.qml">
-      <Filter>Resource Files</Filter>
-    </None>
+
   </ItemGroup>
 </Project>
