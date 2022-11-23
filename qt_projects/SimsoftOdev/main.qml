@@ -10,5 +10,5 @@ Window {
     width: 1024
     height: 720
 
-    Grid_layout{}
+    MainWindow{}
 }
