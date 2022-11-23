@@ -35,4 +35,5 @@ DISTFILES += \
     Second_row.qml \
     Date.qml \
     Grid_layout.qml \
-    Set_drift_depth.qml
+    Set_drift_depth.qml \
+    Sim_slider.qml

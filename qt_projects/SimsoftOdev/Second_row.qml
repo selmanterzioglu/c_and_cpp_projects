@@ -1,11 +1,10 @@
 import QtQuick 2.0
 
 Row {
-    spacing: 15
+    spacing: 25
 
-    Date{}
-    Set_drift_depth{}
-
-
+//    Date{}
+//    Set_drift_depth{}
+//    Sim_slider{}
 
 }

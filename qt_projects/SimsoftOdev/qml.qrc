@@ -10,5 +10,6 @@
         <file>Grid_layout.qml</file>
         <file>assets/clock.png</file>
         <file>Set_drift_depth.qml</file>
+        <file>Sim_slider.qml</file>
     </qresource>
 </RCC>
