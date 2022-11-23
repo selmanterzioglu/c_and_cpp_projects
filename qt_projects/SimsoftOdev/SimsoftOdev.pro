@@ -31,4 +31,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     Dial_motors.qml \
-    Display_text.qml
+    Display_row.qml \
+    Second_row.qml \
+    Date.qml \
+    Grid_layout.qml \
+    Set_drift_depth.qml

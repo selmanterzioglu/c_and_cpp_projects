@@ -3,14 +3,12 @@ import QtQuick.Extras 1.4
 
 
 Window {
-       
     visible: true
         
     title: qsTr("Hello World")
 
-    width: 640
-    height: 480
+    width: 1024
+    height: 720
 
-    Display_text{}
-
+    Grid_layout{}
 }

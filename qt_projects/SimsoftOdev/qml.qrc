@@ -3,7 +3,12 @@
         <file>main.qml</file>
         <file>Dial_motors.qml</file>
         <file>MainForm.ui.qml</file>
-        <file>Display_text.qml</file>
-        <file>display_text_element.qml</file>
+        <file>Display_elements.qml</file>
+        <file>First_row.qml</file>
+        <file>Second_row.qml</file>
+        <file>Date.qml</file>
+        <file>Grid_layout.qml</file>
+        <file>assets/clock.png</file>
+        <file>Set_drift_depth.qml</file>
     </qresource>
 </RCC>
