@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>Dial_motors.qml</file>
         <file>MainForm.ui.qml</file>
+        <file>Display_text.qml</file>
+        <file>display_text_element.qml</file>
     </qresource>
 </RCC>

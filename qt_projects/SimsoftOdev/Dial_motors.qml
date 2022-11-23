@@ -16,12 +16,11 @@ Rectangle{
         property real maximumValueAngle: 145
         x: 0
         y: 0
+        value: 1
         visible: true
         scale: 1
 
-
         style: CircularGaugeStyle{
-
 
             foreground: Item {
                 Rectangle {

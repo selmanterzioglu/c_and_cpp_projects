@@ -10,4 +10,7 @@ Window {
 
     width: 640
     height: 480
+
+    Display_text{}
+
 }

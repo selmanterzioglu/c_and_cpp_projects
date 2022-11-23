@@ -30,4 +30,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    Dial_motors.qml
+    Dial_motors.qml \
+    Display_text.qml
